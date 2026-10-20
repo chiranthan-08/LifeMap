@@ -511,23 +511,31 @@
   }
 
   function updateStorageUsageIndicator() {
-    const el = document.getElementById('storageUsageText');
-    const bar = document.getElementById('storageProgressBar');
-    if (!el || !bar) return;
+    try {
+      const el = document.getElementById('storageUsageText');
+      const bar = document.getElementById('storageProgressBar');
+      if (!el || !bar) return;
 
-    let totalBytes = 0;
-    for (let key in localStorage) {
-      if (localStorage.hasOwnProperty(key)) {
-        totalBytes += (localStorage[key].length + key.length) * 2;
+      let totalBytes = 0;
+      if (typeof localStorage !== 'undefined') {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key) {
+            const val = localStorage.getItem(key) || '';
+            totalBytes += (val.length + key.length) * 2;
+          }
+        }
       }
+
+      const kb = (totalBytes / 1024).toFixed(1);
+      const maxMb = 5.0;
+      const percent = Math.min(100, Math.max(1, (totalBytes / (maxMb * 1024 * 1024)) * 100));
+
+      el.textContent = `${kb} KB / ~${maxMb} MB`;
+      bar.style.width = `${percent}%`;
+    } catch (err) {
+      console.warn('Storage calculation error:', err);
     }
-
-    const kb = (totalBytes / 1024).toFixed(1);
-    const maxMb = 5.0;
-    const percent = Math.min(100, Math.max(1, (totalBytes / (maxMb * 1024 * 1024)) * 100));
-
-    el.textContent = `${kb} KB / ~${maxMb} MB`;
-    bar.style.width = `${percent}%`;
   }
 
   // ==========================================
@@ -1578,8 +1586,10 @@
     const viewport = document.getElementById('mapViewport');
     if (!viewport) return;
     const rect = viewport.getBoundingClientRect();
-    State.map.panX = rect.width / 2;
-    State.map.panY = rect.height / 2;
+    const w = rect.width || window.innerWidth || 800;
+    const h = rect.height || window.innerHeight || 600;
+    State.map.panX = w / 2;
+    State.map.panY = h / 2;
     State.map.scale = 1;
     applyMapTransform();
   }
@@ -2058,14 +2068,14 @@
     const canvas = document.getElementById('starryCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let width = (canvas.width = canvas.offsetWidth);
-    let height = (canvas.height = canvas.offsetHeight);
+    let width = (canvas.width = canvas.offsetWidth || window.innerWidth || 800);
+    let height = (canvas.height = canvas.offsetHeight || window.innerHeight || 600);
 
     window.addEventListener('resize', () => {
-      if (canvas.offsetWidth && canvas.offsetHeight) {
-        width = canvas.width = canvas.offsetWidth;
-        height = canvas.height = canvas.offsetHeight;
-      }
+      const w = canvas.offsetWidth || window.innerWidth || 800;
+      const h = canvas.offsetHeight || window.innerHeight || 600;
+      width = canvas.width = w;
+      height = canvas.height = h;
     });
 
     const stars = Array.from({ length: 60 }, () => ({
