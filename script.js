@@ -20,7 +20,9 @@
     FOCUS_SESSIONS: 'lifemap_student_focus_sessions_v3',
     DAILY_MISSIONS: 'lifemap_student_daily_missions_v3',
     SETTINGS: 'lifemap_student_settings_v3',
-    INITIALIZED: 'lifemap_student_init_v3'
+    INITIALIZED: 'lifemap_student_init_v3',
+    USERS: 'lifemap_student_users_v3',
+    CURRENT_USER: 'lifemap_student_current_user_v3'
   };
 
   const CATEGORY_META = {
@@ -3409,12 +3411,406 @@
   }
 
   // ==========================================
-  // 20. BOOTSTRAP INITIALIZATION
+  // 20. STUDENT AUTHENTICATION (LOGIN & REGISTRATION)
+  // ==========================================
+
+  const DEFAULT_USERS = [
+    {
+      id: 'user_chirag',
+      name: 'Chirag Gowda',
+      email: 'chirag@student.edu',
+      password: 'password123',
+      level: 'Undergraduate Scholar',
+      targetGoal: '9.5 CGPA & GATE 2027',
+      avatar: '🎓',
+      createdAt: '2026-01-15T08:00:00.000Z'
+    }
+  ];
+
+  function getRegisteredUsers() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.USERS);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.warn('Error reading registered users:', e);
+    }
+    return [...DEFAULT_USERS];
+  }
+
+  function saveRegisteredUsers(users) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+    } catch (e) {
+      console.warn('Error saving registered users:', e);
+    }
+  }
+
+  function getCurrentUser() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {
+      console.warn('Error reading current user session:', e);
+    }
+    return null;
+  }
+
+  function setCurrentUser(user) {
+    try {
+      if (user) {
+        localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
+      } else {
+        localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+      }
+    } catch (e) {
+      console.warn('Error setting current user session:', e);
+    }
+    updateAuthUI();
+  }
+
+  function openAuthModal(mode = 'signin') {
+    const modal = document.getElementById('authModal');
+    if (!modal) return;
+    
+    document.getElementById('loginForm')?.reset();
+    document.getElementById('registerForm')?.reset();
+    clearAuthErrors();
+
+    if (mode === 'register') {
+      switchAuthTab('register');
+    } else {
+      switchAuthTab('signin');
+    }
+
+    modal.classList.add('active');
+  }
+
+  function closeAuthModal() {
+    const modal = document.getElementById('authModal');
+    if (modal) modal.classList.remove('active');
+    clearAuthErrors();
+  }
+
+  function switchAuthTab(tab) {
+    const isSignIn = tab === 'signin';
+    const tabSignIn = document.getElementById('tabSignIn');
+    const tabRegister = document.getElementById('tabRegister');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const heading = document.getElementById('authModalHeading');
+    const subheading = document.getElementById('authModalSubheading');
+
+    if (tabSignIn && tabRegister) {
+      tabSignIn.classList.toggle('active', isSignIn);
+      tabSignIn.setAttribute('aria-selected', isSignIn ? 'true' : 'false');
+      tabRegister.classList.toggle('active', !isSignIn);
+      tabRegister.setAttribute('aria-selected', !isSignIn ? 'true' : 'false');
+    }
+
+    if (loginForm && registerForm) {
+      loginForm.classList.toggle('hidden', !isSignIn);
+      registerForm.classList.toggle('hidden', isSignIn);
+    }
+
+    if (heading && subheading) {
+      if (isSignIn) {
+        heading.textContent = 'Welcome Back, Scholar';
+        subheading.textContent = 'Sign in to sync your study records, courses, and journey map.';
+      } else {
+        heading.textContent = 'Create Student Account';
+        subheading.textContent = 'Begin mapping your academic achievements, focus hours, and goals.';
+      }
+    }
+
+    clearAuthErrors();
+  }
+
+  function clearAuthErrors() {
+    document.querySelectorAll('.auth-form .form-error').forEach(el => {
+      el.textContent = '';
+      el.classList.add('hidden');
+    });
+  }
+
+  function setAuthError(elId, msg) {
+    const el = document.getElementById(elId);
+    if (el) {
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+  }
+
+  function handleLoginSubmit(e) {
+    e.preventDefault();
+    clearAuthErrors();
+
+    const emailInput = document.getElementById('loginEmail');
+    const passwordInput = document.getElementById('loginPassword');
+
+    const email = emailInput?.value.trim().toLowerCase() || '';
+    const password = passwordInput?.value || '';
+
+    let hasError = false;
+    if (!email) {
+      setAuthError('loginEmailError', 'Please enter your student email or username.');
+      hasError = true;
+    }
+    if (!password) {
+      setAuthError('loginPasswordError', 'Please enter your password.');
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    const users = getRegisteredUsers();
+    const user = users.find(u => 
+      (u.email.toLowerCase() === email || u.name.toLowerCase() === email) && 
+      u.password === password
+    );
+
+    if (!user) {
+      setAuthError('loginPasswordError', 'Invalid credentials. Check email & password or try Instant Demo Login.');
+      return;
+    }
+
+    setCurrentUser(user);
+    closeAuthModal();
+    showToast(`Welcome back, ${user.name}! Ready to conquer your studies? 🔥`, 'success');
+  }
+
+  function handleRegisterSubmit(e) {
+    e.preventDefault();
+    clearAuthErrors();
+
+    const name = document.getElementById('regFullName')?.value.trim() || '';
+    const email = document.getElementById('regEmail')?.value.trim().toLowerCase() || '';
+    const level = document.getElementById('regLevel')?.value || 'Undergraduate Scholar';
+    const targetGoal = document.getElementById('regTargetGoal')?.value.trim() || '';
+    const password = document.getElementById('regPassword')?.value || '';
+    const confirmPassword = document.getElementById('regConfirmPassword')?.value || '';
+    const avatar = document.getElementById('regAvatar')?.value || '🎓';
+
+    let hasError = false;
+    if (!name || name.length < 2) {
+      setAuthError('regFullNameError', 'Please enter your full name (at least 2 letters).');
+      hasError = true;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      setAuthError('regEmailError', 'Please enter a valid student email address.');
+      hasError = true;
+    }
+
+    if (!password || password.length < 6) {
+      setAuthError('regPasswordError', 'Password must be at least 6 characters.');
+      hasError = true;
+    } else if (password !== confirmPassword) {
+      setAuthError('regConfirmPasswordError', 'Passwords do not match.');
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    const users = getRegisteredUsers();
+    if (users.some(u => u.email.toLowerCase() === email)) {
+      setAuthError('regEmailError', 'An account with this email already exists. Sign In instead.');
+      return;
+    }
+
+    const newUser = {
+      id: `user_${Date.now()}`,
+      name,
+      email,
+      level,
+      targetGoal,
+      password,
+      avatar,
+      createdAt: new Date().toISOString()
+    };
+
+    users.push(newUser);
+    saveRegisteredUsers(users);
+
+    // Sync to user settings
+    State.settings.userName = name;
+    saveAllData();
+
+    setCurrentUser(newUser);
+    closeAuthModal();
+    showToast(`Welcome to LifeMap Student, ${name}! Your educational journey begins now. 🚀`, 'success');
+  }
+
+  function handleDemoLogin() {
+    const users = getRegisteredUsers();
+    let demoUser = users.find(u => u.id === 'user_chirag');
+    if (!demoUser) {
+      demoUser = DEFAULT_USERS[0];
+      users.push(demoUser);
+      saveRegisteredUsers(users);
+    }
+    setCurrentUser(demoUser);
+    closeAuthModal();
+    showToast(`Signed in as Demo Scholar: ${demoUser.name} 🎓`, 'success');
+  }
+
+  function handleLogout() {
+    setCurrentUser(null);
+    document.getElementById('userProfileDropdown')?.classList.add('hidden');
+    showToast('Logged out of student account. Progress remains safely saved.', 'info');
+  }
+
+  function updateAuthUI() {
+    const user = getCurrentUser();
+    const authBtn = document.getElementById('headerAuthBtn');
+    const authBtnText = document.getElementById('headerAuthBtnText');
+    const authIcon = document.getElementById('headerAuthIcon');
+    const dropdown = document.getElementById('userProfileDropdown');
+
+    const heroName = document.getElementById('heroUserName');
+    const sidebarName = document.getElementById('sidebarUserName');
+    const sidebarAvatar = document.getElementById('sidebarAvatar');
+    const sidebarLevel = document.getElementById('sidebarLevelBadge');
+
+    const dropdownAvatar = document.getElementById('dropdownAvatar');
+    const dropdownName = document.getElementById('dropdownUserName');
+    const dropdownLevel = document.getElementById('dropdownUserLevel');
+    const dropdownEmail = document.getElementById('dropdownUserEmail');
+
+    if (user) {
+      // Logged in
+      if (authBtn) {
+        authBtn.classList.add('logged-in');
+        authBtn.setAttribute('title', `Logged in as ${user.name} (${user.level})`);
+      }
+      if (authIcon) authIcon.classList.add('hidden');
+      if (authBtnText) {
+        authBtnText.innerHTML = `<span class="auth-user-pill"><span class="auth-user-avatar">${user.avatar || '🎓'}</span><span class="auth-user-name">${escapeHtml(user.name)}</span></span>`;
+      }
+
+      if (dropdownAvatar) dropdownAvatar.textContent = user.avatar || '🎓';
+      if (dropdownName) dropdownName.textContent = user.name;
+      if (dropdownLevel) dropdownLevel.textContent = user.level || 'Scholar';
+      if (dropdownEmail) dropdownEmail.textContent = user.email;
+
+      if (heroName) heroName.textContent = user.name;
+      if (sidebarName) sidebarName.textContent = user.name;
+      if (sidebarLevel) sidebarLevel.textContent = user.level || 'Level 4 Scholar';
+      if (sidebarAvatar) sidebarAvatar.textContent = user.avatar || user.name.charAt(0).toUpperCase();
+    } else {
+      // Logged out / Guest
+      if (authBtn) {
+        authBtn.classList.remove('logged-in');
+        authBtn.setAttribute('title', 'Sign In or Register');
+      }
+      if (authIcon) authIcon.classList.remove('hidden');
+      if (authBtnText) authBtnText.textContent = 'Sign In';
+
+      if (dropdown) dropdown.classList.add('hidden');
+
+      const defName = State.settings.userName || 'Student';
+      if (heroName) heroName.textContent = defName;
+      if (sidebarName) sidebarName.textContent = defName;
+      if (sidebarLevel) sidebarLevel.textContent = 'Level 4 Scholar';
+      if (sidebarAvatar) sidebarAvatar.textContent = defName.charAt(0).toUpperCase();
+    }
+  }
+
+  function setupAuthListeners() {
+    // Header Auth Button click
+    document.getElementById('headerAuthBtn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const user = getCurrentUser();
+      if (user) {
+        document.getElementById('userProfileDropdown')?.classList.toggle('hidden');
+      } else {
+        openAuthModal('signin');
+      }
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+      const wrap = document.getElementById('headerAuthWrap');
+      if (wrap && !wrap.contains(e.target)) {
+        document.getElementById('userProfileDropdown')?.classList.add('hidden');
+      }
+    });
+
+    // Sidebar footer click opens profile/login
+    document.getElementById('sidebarFooterUser')?.addEventListener('click', () => {
+      const user = getCurrentUser();
+      if (user) {
+        switchView('settings');
+      } else {
+        openAuthModal('signin');
+      }
+    });
+
+    // Modal tabs
+    document.getElementById('tabSignIn')?.addEventListener('click', () => switchAuthTab('signin'));
+    document.getElementById('tabRegister')?.addEventListener('click', () => switchAuthTab('register'));
+
+    // Close button
+    document.getElementById('closeAuthModalBtn')?.addEventListener('click', closeAuthModal);
+
+    // Click backdrop to close
+    document.getElementById('authModal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'authModal') closeAuthModal();
+    });
+
+    // Forms
+    document.getElementById('loginForm')?.addEventListener('submit', handleLoginSubmit);
+    document.getElementById('registerForm')?.addEventListener('submit', handleRegisterSubmit);
+
+    // Demo Login
+    document.getElementById('demoLoginBtn')?.addEventListener('click', handleDemoLogin);
+
+    // Dropdown items
+    document.getElementById('dropdownLogoutBtn')?.addEventListener('click', handleLogout);
+    document.getElementById('dropdownSwitchUserBtn')?.addEventListener('click', () => {
+      document.getElementById('userProfileDropdown')?.classList.add('hidden');
+      openAuthModal('signin');
+    });
+    document.getElementById('dropdownSettingsBtn')?.addEventListener('click', () => {
+      document.getElementById('userProfileDropdown')?.classList.add('hidden');
+      switchView('settings');
+    });
+
+    // Password visibility toggle buttons
+    document.querySelectorAll('.pwd-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const input = document.getElementById(targetId);
+        if (input) {
+          const isPwd = input.type === 'password';
+          input.type = isPwd ? 'text' : 'password';
+          btn.style.color = isPwd ? 'var(--accent-cyan)' : 'var(--text-muted)';
+        }
+      });
+    });
+
+    // Avatar picker buttons
+    document.querySelectorAll('#avatarPicker .avatar-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#avatarPicker .avatar-opt').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const regAvatar = document.getElementById('regAvatar');
+        if (regAvatar) regAvatar.value = btn.dataset.avatar;
+      });
+    });
+  }
+
+  // ==========================================
+  // 21. BOOTSTRAP INITIALIZATION
   // ==========================================
 
   function initApp() {
     loadSavedData();
     applySettings();
+    updateAuthUI();
 
     initMapEngine();
     setupFormValidationAndHandlers();
@@ -3428,6 +3824,7 @@
     setupAmbientListeners();
     setupConfirmModalListeners();
     setupKeyboardShortcuts();
+    setupAuthListeners();
 
     document.querySelectorAll('.nav-item').forEach(btn => {
       btn.addEventListener('click', (e) => switchView(e.currentTarget.dataset.view));
@@ -3477,6 +3874,10 @@
   // Global API
   window.LifeMapApp = {
     switchView,
+    openAuthModal,
+    closeAuthModal,
+    handleLogout,
+    getCurrentUser,
     openAddMemoryModal,
     openEditMemoryModal,
     openMemoryDetails,
