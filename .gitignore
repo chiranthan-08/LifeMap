@@ -1,0 +1,7 @@
+.DS_Store
+Thumbs.db
+*.log
+.system_generated/
+scratch/
+__pycache__/
+*.tmp

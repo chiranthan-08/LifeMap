@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeMap Student — Ultimate Student Motivational & Living Journey Portal</title>
+  <meta name="description" content="LifeMap Student is an interactive motivational portal for students to master academics, maintain physical and mental health, set personal records, and map their educational journey.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- App Container -->
+  <div id="app" class="app-layout">
+    
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-icon-wrapper">
+            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+            <div class="brand-glow"></div>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">LifeMap</span>
+            <span class="brand-subtitle">Student Portal</span>
+          </div>
+        </div>
+        <button id="sidebarToggleBtn" class="icon-btn sidebar-toggle" title="Collapse sidebar" aria-label="Toggle Sidebar">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Quick Action: Log Milestone / Study Session -->
+      <div class="sidebar-quick-action">
+        <button id="quickAddMemoryBtn" class="btn btn-primary btn-block">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>Log Milestone</span>
+        </button>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav" aria-label="Student Navigation">
+        <button class="nav-item active" data-view="dashboard" id="nav-dashboard">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="9" rx="1"/>
+            <rect x="14" y="3" width="7" height="5" rx="1"/>
+            <rect x="14" y="12" width="7" height="9" rx="1"/>
+            <rect x="3" y="16" width="7" height="5" rx="1"/>
+          </svg>
+          <span class="nav-label">Dashboard</span>
+        </button>
+
+        <button class="nav-item" data-view="map" id="nav-map">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+            <line x1="8" y1="2" x2="8" y2="18"/>
+            <line x1="16" y1="6" x2="16" y2="22"/>
+          </svg>
+          <span class="nav-label">Journey Map</span>
+          <span class="nav-badge" id="navMapCount">0</span>
+        </button>
+
+        <button class="nav-item" data-view="focus" id="nav-focus">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span class="nav-label">Study & Focus</span>
+          <span class="nav-badge focus-badge" id="navFocusBadge">25m</span>
+        </button>
+
+        <button class="nav-item" data-view="academics" id="nav-academics">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          <span class="nav-label">Courses & Grades</span>
+        </button>
+
+        <button class="nav-item" data-view="wellness" id="nav-wellness">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span class="nav-label">Health & Wellness</span>
+        </button>
+
+        <button class="nav-item" data-view="records" id="nav-records">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="7"/>
+            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+          </svg>
+          <span class="nav-label">Hall of Records</span>
+          <span class="nav-badge record-badge" id="navRecordsCount">0</span>
+        </button>
+
+        <button class="nav-item" data-view="goals" id="nav-goals">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="6"/>
+            <circle cx="12" cy="12" r="2"/>
+          </svg>
+          <span class="nav-label">Goals & Dreams</span>
+          <span class="nav-badge goal-badge" id="navGoalCount">0</span>
+        </button>
+
+        <button class="nav-item" data-view="timeline" id="nav-timeline">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <circle cx="12" cy="6" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="12" cy="18" r="2"></circle>
+          </svg>
+          <span class="nav-label">Timeline</span>
+        </button>
+
+        <button class="nav-item" data-view="motivation" id="nav-motivation">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          <span class="nav-label">Motivation Wall</span>
+        </button>
+
+        <button class="nav-item" data-view="insights" id="nav-insights">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          <span class="nav-label">Analytics</span>
+        </button>
+
+        <button class="nav-item" data-view="settings" id="nav-settings">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <span class="nav-label">Settings</span>
+        </button>
+      </nav>
+
+      <!-- Ambient Soundscape Player in Sidebar -->
+      <div class="sidebar-ambient-card">
+        <div class="ambient-header">
+          <div class="ambient-title">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18V5l12-2v13"></path>
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+            <span>Study Soundscapes</span>
+          </div>
+          <button id="ambientToggleBtn" class="ambient-play-btn" title="Toggle peaceful study ambient audio" aria-label="Toggle ambient audio">
+            <svg id="ambientPlayIcon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </button>
+        </div>
+        <div class="ambient-controls">
+          <button class="ambient-sound-btn active" data-sound="binaural">Focus Wave</button>
+          <button class="ambient-sound-btn" data-sound="rain">Library Rain</button>
+          <button class="ambient-sound-btn" data-sound="zen">Deep Zen</button>
+        </div>
+      </div>
+
+      <!-- User Profile Footnote -->
+      <div class="sidebar-footer">
+        <div class="user-avatar" id="sidebarAvatar">S</div>
+        <div class="user-info">
+          <span class="user-name" id="sidebarUserName">Student</span>
+          <span class="user-status" id="sidebarLevelBadge">Level 4 Scholar</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Header Bar -->
+      <header class="top-header">
+        <div class="header-left">
+          <button id="mobileMenuBtn" class="icon-btn mobile-menu-btn" aria-label="Open navigation menu">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div class="page-title-group">
+            <h1 class="page-title" id="pageTitle">Student Motivational Hub</h1>
+            <p class="page-tagline" id="pageTagline">"Master your studies, protect your health, and shatter your personal records."</p>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- Study Streak Pill -->
+          <div class="streak-pill" id="headerStreakPill" title="Consecutive daily study & milestone streak">
+            <span class="streak-icon">🔥</span>
+            <span class="streak-count" id="headerStreakCount">14</span>
+            <span class="streak-label">Day Streak</span>
+          </div>
+
+          <!-- Quick Search -->
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="globalSearchInput" placeholder="Find subject, record, lesson..." autocomplete="off">
+            <kbd class="search-shortcut">Ctrl+K</kbd>
+          </div>
+
+          <!-- Quick Pomodoro Button -->
+          <button id="headerFocusTimerBtn" class="btn btn-outline" title="Start Focus Timer">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span>Focus 25m</span>
+          </button>
+
+          <!-- New Record / Milestone Button -->
+          <button id="headerAddRecordBtn" class="btn btn-secondary" title="Add personal record or exam score">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="7"/>
+              <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+            </svg>
+            <span>New Record</span>
+          </button>
+
+          <!-- Theme Toggle Button -->
+          <button id="themeToggleBtn" class="icon-btn" title="Toggle theme" aria-label="Toggle color theme">
+            <svg id="themeIconSun" class="theme-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg id="themeIconMoon" class="theme-icon hidden" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Notification Toast Container -->
+      <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+      <!-- VIEW 1: Dashboard Overview -->
+      <section id="view-dashboard" class="view-section active">
+        <div class="dashboard-hero student-hero">
+          <div class="hero-content">
+            <div class="hero-badge student-badge">
+              <span class="pulsing-dot"></span>
+              <span>Student Motivation Engine</span>
+            </div>
+            <h2 class="hero-greeting" id="heroGreeting">Unstoppable Focus, <span class="highlight-name" id="heroUserName">Chirag</span></h2>
+            <p class="hero-quote" id="inspirationalQuote">"The secret of getting ahead is getting started. Small daily disciplines compound into legendary records."</p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" onclick="window.LifeMapApp.switchView('focus')">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span>Enter Focus Zone</span>
+              </button>
+              <button class="btn btn-outline" onclick="window.LifeMapApp.openAddMemoryModal()">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Record Milestone</span>
+              </button>
+              <button class="btn btn-glass" onclick="window.LifeMapApp.switchView('map')">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+                </svg>
+                <span>Explore Journey Constellation</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mini Interactive Map Preview Card -->
+          <div class="hero-preview-card" onclick="window.LifeMapApp.switchView('map')" title="Click to open full interactive student constellation map">
+            <div class="preview-badge">Student Constellation Radar</div>
+            <svg id="dashboardMiniMap" class="mini-map-svg" viewBox="0 0 300 200"></svg>
+            <div class="preview-overlay">
+              <span>View Full Visual Journey &rarr;</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Dynamic Statistics Row -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon-wrap stat-study">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-value" id="statFocusHours">48.5h</span>
+              <span class="stat-label">Focus Time Logged</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap stat-achievements">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="8" r="7"/>
+                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+              </svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-value" id="statPersonalRecords">12</span>
+              <span class="stat-label">Personal Records Set</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap stat-lessons">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-value" id="statExamBreakthroughs">0</span>
+              <span class="stat-label">Academic Milestones</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap stat-wellness">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-value" id="statWellnessScore">94%</span>
+              <span class="stat-label">Health & Energy Index</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap stat-goals">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-value" id="statGoalsCompleted">0</span>
+              <span class="stat-label">Ambitions Realized</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Mission & Quick Log Row -->
+        <div class="dashboard-columns">
+          
+          <!-- Today's Academic & Wellness Mission Checklist -->
+          <div class="dashboard-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 11l3 3L22 4"/>
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+                <span>Today's Student Mission</span>
+              </h3>
+              <button class="btn btn-outline btn-sm" id="addDailyMissionBtn">+ New Task</button>
+            </div>
+            <div id="dailyMissionList" class="daily-mission-list">
+              <!-- Dynamically populated missions -->
+            </div>
+          </div>
+
+          <!-- Upcoming Exams & Deadlines Countdown -->
+          <div class="dashboard-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>Upcoming Exams & Deadlines</span>
+              </h3>
+              <button class="text-link" onclick="window.LifeMapApp.switchView('academics')">View All Courses &rarr;</button>
+            </div>
+            <div id="dashboardExamCountdowns" class="exam-countdowns-list">
+              <!-- Dynamically populated exam countdowns -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Recent Records & Wellness Summary -->
+        <div class="dashboard-columns" style="margin-top: 24px;">
+          <!-- Recent Milestones & Breakthroughs -->
+          <div class="dashboard-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+                <span>Recent Milestone Breakthroughs</span>
+              </h3>
+              <button class="text-link" onclick="window.LifeMapApp.switchView('timeline')">View Full Timeline &rarr;</button>
+            </div>
+            <div id="recentActivityList" class="recent-activity-list"></div>
+          </div>
+
+          <!-- Quick Health & Hydration Glance -->
+          <div class="dashboard-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                </svg>
+                <span>Daily Health Balance</span>
+              </h3>
+              <button class="text-link" onclick="window.LifeMapApp.switchView('wellness')">Wellness Studio &rarr;</button>
+            </div>
+            <div class="quick-wellness-box">
+              <div class="quick-wellness-item">
+                <div class="wellness-icon-wrap">💧</div>
+                <div>
+                  <div class="wellness-metric-label">Hydration Today</div>
+                  <div class="wellness-metric-val" id="dashWaterText">6 / 8 Glasses</div>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="window.LifeMapApp.logWaterGlass()">+1 Glass</button>
+              </div>
+
+              <div class="quick-wellness-item">
+                <div class="wellness-icon-wrap">🌙</div>
+                <div>
+                  <div class="wellness-metric-label">Sleep Last Night</div>
+                  <div class="wellness-metric-val" id="dashSleepText">7.5 Hours (Restful)</div>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="window.LifeMapApp.switchView('wellness')">Log Sleep</button>
+              </div>
+
+              <div class="quick-wellness-item">
+                <div class="wellness-icon-wrap">🧘</div>
+                <div>
+                  <div class="wellness-metric-label">Study Stress Level</div>
+                  <div class="wellness-metric-val" id="dashStressText">Low / Calm Focus</div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="window.LifeMapApp.startBreathingExercise()">De-Stress (2m)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: Interactive Student Constellation Map -->
+      <section id="view-map" class="view-section">
+        <!-- Map Canvas Controls Toolbar -->
+        <div class="map-toolbar">
+          <div class="toolbar-left">
+            <div class="toolbar-group">
+              <button id="mapZoomInBtn" class="map-tool-btn" title="Zoom In (+)">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  <line x1="11" y1="8" x2="11" y2="14"></line>
+                  <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+              </button>
+              <button id="mapZoomOutBtn" class="map-tool-btn" title="Zoom Out (-)">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+              </button>
+              <button id="mapResetViewBtn" class="map-tool-btn" title="Reset View (0)">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                  <path d="M3 3v5h5"/>
+                </svg>
+              </button>
+              <button id="mapCenterGenesisBtn" class="map-tool-btn" title="Center on Student Genesis">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="toolbar-divider"></div>
+
+            <!-- Category Filter Selector -->
+            <div class="toolbar-filter">
+              <label for="mapCategoryFilter" class="sr-only">Filter by Category</label>
+              <select id="mapCategoryFilter" class="form-select select-sm">
+                <option value="all">All Student Domains</option>
+                <option value="academics">Academics & Exams</option>
+                <option value="records">Personal Records & Scores</option>
+                <option value="wellness">Health & Wellness</option>
+                <option value="skills">Skills & Hackathons</option>
+                <option value="lessons">Study Habits & Lessons</option>
+                <option value="career">Career & Internships</option>
+                <option value="friendships">Study Groups & Mentors</option>
+                <option value="goals">Future Ambitions</option>
+                <option value="turning_points">Landmark Turning Points</option>
+              </select>
+            </div>
+
+            <!-- Era Filter Selector -->
+            <div class="toolbar-filter">
+              <label for="mapEraFilter" class="sr-only">Filter by Semester / Phase</label>
+              <select id="mapEraFilter" class="form-select select-sm">
+                <option value="all">All Academic Phases</option>
+                <option value="early">Foundations & School</option>
+                <option value="academic">University & College</option>
+                <option value="career">Internships & Professional</option>
+                <option value="future">Post-Grad & Future Vision</option>
+              </select>
+            </div>
+
+            <!-- Toggle Labels Button -->
+            <button id="mapToggleLabelsBtn" class="map-tool-btn active" title="Toggle Node Labels">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 7V4h16v3M9 20h6M12 4v16"/>
+              </svg>
+            </button>
+
+            <!-- Auto Layout Button -->
+            <button id="mapAutoLayoutBtn" class="map-tool-btn" title="Harmonize Node Positions">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="2"></circle>
+                <circle cx="6" cy="6" r="2"></circle>
+                <circle cx="18" cy="6" r="2"></circle>
+                <circle cx="6" cy="18" r="2"></circle>
+                <circle cx="18" cy="18" r="2"></circle>
+              </svg>
+            </button>
+          </div>
+
+          <div class="toolbar-right">
+            <!-- Map Search Filter -->
+            <div class="map-search-wrap">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="mapSearchInput" placeholder="Search constellation..." aria-label="Filter map nodes">
+            </div>
+
+            <!-- Export Map Snapshot Button -->
+            <button id="mapExportImageBtn" class="btn btn-sm btn-outline" title="Export Map as PNG Image">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Export Map</span>
+            </button>
+
+            <!-- Add Milestone Button -->
+            <button id="mapAddNodeBtn" class="btn btn-sm btn-primary">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Log Node</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- The Map Canvas Viewport Container -->
+        <div id="mapViewport" class="map-viewport" tabindex="0" aria-label="Interactive Student Journey Map Canvas. Drag to pan, scroll to zoom, click nodes for details, drag nodes to arrange.">
+          <canvas id="starryCanvas" class="starry-canvas"></canvas>
+
+          <svg id="lifeMapSvg" class="life-map-svg" width="100%" height="100%">
+            <defs>
+              <filter id="glowFilter" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+
+              <filter id="strongGlowFilter" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="7" result="blur1" />
+                <feGaussianBlur stdDeviation="3" result="blur2" />
+                <feMerge>
+                  <feMergeNode in="blur1" />
+                  <feMergeNode in="blur2" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+
+              <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.8" />
+                <stop offset="50%" stop-color="#6366f1" stop-opacity="0.8" />
+                <stop offset="100%" stop-color="#10b981" stop-opacity="0.8" />
+              </linearGradient>
+
+              <linearGradient id="genesisGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8" />
+                <stop offset="100%" stop-color="#818cf8" />
+              </linearGradient>
+            </defs>
+
+            <g id="mapWorldGroup" class="map-world">
+              <g id="mapGridLayer" class="map-grid-layer"></g>
+              <g id="mapConnectionsLayer" class="map-connections-layer"></g>
+              <g id="mapRingsLayer" class="map-rings-layer"></g>
+              <g id="mapNodesLayer" class="map-nodes-layer"></g>
+              <g id="mapLabelsLayer" class="map-labels-layer"></g>
+            </g>
+          </svg>
+
+          <!-- Interactive Map Overlay HUD -->
+          <div class="map-hud-bottom">
+            <div class="map-instruction">
+              <span class="hint-key">Drag</span> to Pan &bull; <span class="hint-key">Scroll</span> to Zoom &bull; <span class="hint-key">Drag Nodes</span> to Custom Positions &bull; <span class="hint-key">Click</span> Node for Story
+            </div>
+            <div class="map-legend">
+              <span class="legend-chip legend-education">Academics</span>
+              <span class="legend-chip legend-achievements">Records</span>
+              <span class="legend-chip legend-wellness">Health & Wellness</span>
+              <span class="legend-chip legend-career">Skills & Tech</span>
+              <span class="legend-chip legend-lessons">Study Habits</span>
+              <span class="legend-chip legend-goals">Future Ambitions</span>
+              <span class="legend-chip legend-turning-point">Turning Point</span>
+            </div>
+          </div>
+
+          <div id="mapTooltip" class="map-tooltip" role="tooltip"></div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: Study & Focus Zone (Pomodoro & Focus Session Logger) -->
+      <section id="view-focus" class="view-section">
+        <div class="focus-layout">
+          <!-- Pomodoro Timer Card -->
+          <div class="pomodoro-card">
+            <div class="pomo-mode-tabs">
+              <button class="pomo-tab active" data-mode="pomodoro">Focus (25m)</button>
+              <button class="pomo-tab" data-mode="shortBreak">Short Break (5m)</button>
+              <button class="pomo-tab" data-mode="longBreak">Long Break (15m)</button>
+            </div>
+
+            <div class="pomo-timer-display" id="pomoTimerDisplay">25:00</div>
+
+            <div class="pomo-subject-select-wrap">
+              <label for="pomoSubjectSelect" class="form-label">Active Subject / Task:</label>
+              <select id="pomoSubjectSelect" class="form-select">
+                <option value="Data Structures & Algorithms">💻 Data Structures & Algorithms</option>
+                <option value="Calculus & Linear Algebra">📐 Calculus & Linear Algebra</option>
+                <option value="Web Development & Projects">🌐 Web Development & Projects</option>
+                <option value="Physics & Mechanics">⚡ Physics & Mechanics</option>
+                <option value="Exam Revision">📝 Exam Revision & Past Papers</option>
+                <option value="Deep Reading & Research">📖 Deep Reading & Research</option>
+              </select>
+            </div>
+
+            <div class="pomo-controls">
+              <button id="pomoStartBtn" class="btn btn-primary btn-lg">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span id="pomoStartBtnText">Start Focus</span>
+              </button>
+              <button id="pomoResetBtn" class="btn btn-outline btn-lg" title="Reset timer">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                  <path d="M3 3v5h5"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Built-in Ambient Sound Controller in Focus Card -->
+            <div class="pomo-ambient-strip">
+              <span>Background Ambient:</span>
+              <button class="btn btn-glass btn-sm active" onclick="window.LifeMapApp.setFocusSound('binaural')">🎧 Focus Wave</button>
+              <button class="btn btn-glass btn-sm" onclick="window.LifeMapApp.setFocusSound('rain')">🌧️ Library Rain</button>
+              <button class="btn btn-glass btn-sm" onclick="window.LifeMapApp.setFocusSound('zen')">🌿 Deep Zen</button>
+            </div>
+          </div>
+
+          <!-- Focus Stats & Logged Sessions -->
+          <div class="focus-stats-panel">
+            <h3 class="panel-title">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span>Recent Focus Sessions</span>
+            </h3>
+            <p class="panel-desc">Every completed focus block compounds toward your total study record.</p>
+
+            <div id="focusSessionsList" class="focus-sessions-list">
+              <!-- Dynamically populated completed sessions -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: Courses & Academic Tracker -->
+      <section id="view-academics" class="view-section">
+        <div class="academics-header-panel">
+          <div>
+            <h2 class="section-heading">Courses & Academic Target Tracker</h2>
+            <p class="section-subheading">Track your subjects, current grade averages, attendance safety, and upcoming exam dates.</p>
+          </div>
+          <button id="addNewCourseBtn" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Add Course</span>
+          </button>
+        </div>
+
+        <!-- Academic Semester Summary Banner -->
+        <div class="academic-summary-bar">
+          <div class="academic-stat">
+            <span class="stat-number" id="acadTargetGpa">3.85</span>
+            <span class="stat-label">Target GPA</span>
+          </div>
+          <div class="academic-stat">
+            <span class="stat-number" id="acadCurrentGpa">3.78</span>
+            <span class="stat-label">Current Estimated GPA</span>
+          </div>
+          <div class="academic-stat">
+            <span class="stat-number" id="acadTotalCourses">5</span>
+            <span class="stat-label">Active Courses</span>
+          </div>
+          <div class="academic-stat">
+            <span class="stat-number" id="acadAvgAttendance">91%</span>
+            <span class="stat-label">Average Attendance</span>
+          </div>
+        </div>
+
+        <!-- Course Cards Grid -->
+        <div id="coursesGrid" class="courses-grid">
+          <!-- Dynamically populated course cards -->
+        </div>
+      </section>
+
+      <!-- VIEW 5: Student Health & Wellness Studio -->
+      <section id="view-wellness" class="view-section">
+        <div class="wellness-header-panel">
+          <div>
+            <h2 class="section-heading">Student Health & Wellness Studio</h2>
+            <p class="section-subheading">Peak academic performance is impossible with burnt-out health. Nurture your body and mind.</p>
+          </div>
+          <button class="btn btn-primary" onclick="window.LifeMapApp.startBreathingExercise()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            <span>2-Min Guided De-Stress</span>
+          </button>
+        </div>
+
+        <div class="wellness-grid">
+          <!-- Card 1: Hydration Tracker -->
+          <div class="wellness-card">
+            <div class="wellness-card-header">
+              <h3 class="card-title">Daily Hydration</h3>
+              <span class="badge-count" id="wellnessWaterCount">6 / 8 Glasses</span>
+            </div>
+            <p class="wellness-card-sub">Hydration prevents brain fog and study headaches.</p>
+            <div id="waterGlassesGrid" class="water-glasses-row"></div>
+            <div class="wellness-card-actions">
+              <button class="btn btn-outline btn-sm" onclick="window.LifeMapApp.resetWater()">Reset</button>
+              <button class="btn btn-primary btn-sm" onclick="window.LifeMapApp.logWaterGlass()">+ Log Glass</button>
+            </div>
+          </div>
+
+          <!-- Card 2: Sleep & Recovery -->
+          <div class="wellness-card">
+            <div class="wellness-card-header">
+              <h3 class="card-title">Sleep & Brain Recovery</h3>
+              <span class="badge-count" id="wellnessSleepScore">7.5 hrs</span>
+            </div>
+            <p class="wellness-card-sub">Sleep is when your brain consolidates learned memory.</p>
+            <div class="form-group" style="margin-top: 10px;">
+              <label for="sleepHoursInput" class="form-label">Hours of Sleep Last Night: <span id="sleepHoursLabel">7.5h</span></label>
+              <input type="range" id="sleepHoursInput" class="form-range" min="4" max="11" step="0.5" value="7.5">
+            </div>
+            <div class="form-group">
+              <label for="sleepQualitySelect" class="form-label">Sleep Quality:</label>
+              <select id="sleepQualitySelect" class="form-select select-sm">
+                <option value="Restful">🌟 Restful & Rejuvenating</option>
+                <option value="Good">👍 Good / Adequate</option>
+                <option value="Restless">⚡ Restless / Dream-heavy</option>
+                <option value="Insufficient">⚠️ Insufficient / Groggy</option>
+              </select>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="window.LifeMapApp.saveSleepLog()">Save Sleep Log</button>
+          </div>
+
+          <!-- Card 3: Study Energy & Mood -->
+          <div class="wellness-card">
+            <div class="wellness-card-header">
+              <h3 class="card-title">Energy & Study Mood</h3>
+              <span class="badge-count" id="currentMoodBadge">⚡ Energized</span>
+            </div>
+            <p class="wellness-card-sub">How are you feeling right now before your study session?</p>
+            <div class="mood-selector-grid">
+              <button class="mood-btn active" data-mood="Energized">⚡ Energized</button>
+              <button class="mood-btn" data-mood="Focused">🎯 Focused</button>
+              <button class="mood-btn" data-mood="Calm">🌿 Calm</button>
+              <button class="mood-btn" data-mood="Tired">🥱 Tired</button>
+              <button class="mood-btn" data-mood="Stressed">🌧️ Stressed</button>
+            </div>
+            <div class="student-health-tip" id="moodAdviceBox">
+              💡 <strong>Student Tip:</strong> You are in high-energy flow. Tackle your hardest problem sets and complex concepts right now!
+            </div>
+          </div>
+
+          <!-- Card 4: Physical Movement & Exercise -->
+          <div class="wellness-card">
+            <div class="wellness-card-header">
+              <h3 class="card-title">Physical Activity & Workouts</h3>
+              <span class="badge-count" id="workoutCountWeek">3 / 4 this week</span>
+            </div>
+            <p class="wellness-card-sub">Physical exercise boosts neuroplasticity and memory retention.</p>
+            <div class="workout-quick-list" id="workoutQuickList"></div>
+            <div class="add-workout-row">
+              <input type="text" id="newWorkoutInput" class="form-input input-sm" placeholder="e.g. 30m Run, Gym workout, Yoga...">
+              <button class="btn btn-primary btn-sm" id="logWorkoutBtn">Log Workout</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 6: Hall of Records & Personal Bests -->
+      <section id="view-records" class="view-section">
+        <div class="records-header-panel">
+          <div>
+            <h2 class="section-heading">Hall of Records & Personal Bests</h2>
+            <p class="section-subheading">Track all-time academic highs, fitness benchmarks, coding milestones, and achievement badges.</p>
+          </div>
+          <button id="addNewRecordBtn" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Set New Record</span>
+          </button>
+        </div>
+
+        <!-- Achievement Badges Banner -->
+        <div class="badges-banner">
+          <h3 class="badges-banner-title">Unlocked Student Badges</h3>
+          <div id="unlockedBadgesRow" class="badges-row"></div>
+        </div>
+
+        <!-- Personal Bests Grid -->
+        <div id="personalBestsGrid" class="personal-bests-grid">
+          <!-- Dynamically populated personal records -->
+        </div>
+      </section>
+
+      <!-- VIEW 7: Goals & Future Ambitions -->
+      <section id="view-goals" class="view-section">
+        <div class="goals-header-panel">
+          <div>
+            <h2 class="section-heading">Educational Goals & Future Ambitions</h2>
+            <p class="section-subheading">Chart your academic targets and dream milestones. Reaching 100% transforms the goal into an achievement node!</p>
+          </div>
+          <button id="addGoalBtn" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Set New Goal</span>
+          </button>
+        </div>
+
+        <div class="goal-stats-row">
+          <div class="goal-stat-pill">
+            <span class="pill-number" id="goalCountInProgress">0</span>
+            <span class="pill-label">In Progress</span>
+          </div>
+          <div class="goal-stat-pill">
+            <span class="pill-number" id="goalCountNotStarted">0</span>
+            <span class="pill-label">Not Started</span>
+          </div>
+          <div class="goal-stat-pill">
+            <span class="pill-number" id="goalCountCompleted">0</span>
+            <span class="pill-label">Accomplished</span>
+          </div>
+        </div>
+
+        <div id="goalsGrid" class="goals-grid"></div>
+      </section>
+
+      <!-- VIEW 8: Chronological Milestone Timeline -->
+      <section id="view-timeline" class="view-section">
+        <div class="timeline-header-panel">
+          <div class="timeline-header-left">
+            <h2 class="section-heading">Student Journey Timeline</h2>
+            <p class="section-subheading">Walk through your academic breakthroughs, records set, and lessons learned.</p>
+          </div>
+          <div class="timeline-controls">
+            <button id="timelineSortBtn" class="btn btn-outline btn-sm">
+              <span id="timelineSortLabel">Oldest First</span>
+            </button>
+            <select id="timelineCategoryFilter" class="form-select select-sm">
+              <option value="all">All Domains</option>
+              <option value="academics">Academics & Exams</option>
+              <option value="records">Personal Records</option>
+              <option value="wellness">Health & Wellness</option>
+              <option value="skills">Skills & Projects</option>
+              <option value="lessons">Study Habits</option>
+              <option value="career">Career & Internships</option>
+            </select>
+            <input type="text" id="timelineSearchInput" class="form-input input-sm" placeholder="Filter timeline...">
+          </div>
+        </div>
+
+        <div class="timeline-container">
+          <div id="timelineTrack" class="timeline-track"></div>
+        </div>
+      </section>
+
+      <!-- VIEW 9: Motivation Wall & Daily Affirmations -->
+      <section id="view-motivation" class="view-section">
+        <div class="motivation-header-panel">
+          <div>
+            <h2 class="section-heading">Student Motivation Wall & Daily Spark</h2>
+            <p class="section-subheading">Fuel your discipline when willpower is running low. Quotes and principles for academic resilience.</p>
+          </div>
+          <button class="btn btn-secondary" onclick="window.LifeMapApp.shuffleDailyQuote()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <polyline points="1 20 1 14 7 14"></polyline>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+            <span>New Daily Spark</span>
+          </button>
+        </div>
+
+        <!-- Featured Big Quote -->
+        <div class="featured-spark-card" id="featuredSparkCard">
+          <div class="spark-badge">Affirmation of the Day</div>
+          <blockquote class="spark-quote" id="featuredSparkQuote">
+            "You don't have to be extreme, just consistent. 25 minutes of deep focus beats 4 hours of distracted scrolling every single time."
+          </blockquote>
+          <div class="spark-author" id="featuredSparkAuthor">— Student High-Performance Law</div>
+        </div>
+
+        <!-- Motivation Quotes Grid -->
+        <div class="quotes-grid" id="motivationQuotesGrid"></div>
+      </section>
+
+      <!-- VIEW 10: Analytics & Performance Insights -->
+      <section id="view-insights" class="view-section">
+        <div class="insights-header-panel">
+          <h2 class="section-heading">Student Performance & Habit Analytics</h2>
+          <p class="section-subheading">Reflections derived directly from your study sessions, records, and wellness logs.</p>
+        </div>
+
+        <div class="insights-grid">
+          <!-- Category Distribution Donut Chart -->
+          <div class="insight-card">
+            <div class="card-header">
+              <h3 class="card-title">Milestone Domain Balance</h3>
+              <span class="card-subtitle">Distribution across Academics, Health & Records</span>
+            </div>
+            <div class="chart-container donut-chart-container">
+              <svg id="categoryDonutChart" class="insight-svg" viewBox="0 0 260 260"></svg>
+              <div id="categoryLegend" class="chart-legend-grid"></div>
+            </div>
+          </div>
+
+          <!-- Chronological Moments Bar Chart -->
+          <div class="insight-card">
+            <div class="card-header">
+              <h3 class="card-title">Study & Milestones per Period</h3>
+              <span class="card-subtitle">Peak productivity chapters in your journey</span>
+            </div>
+            <div class="chart-container bar-chart-container">
+              <svg id="yearlyBarChart" class="insight-svg" viewBox="0 0 380 200"></svg>
+            </div>
+          </div>
+
+          <!-- Emotion / Energy Spectrum -->
+          <div class="insight-card">
+            <div class="card-header">
+              <h3 class="card-title">Dominant Study Mindsets</h3>
+              <span class="card-subtitle">Emotional & mental state breakdown</span>
+            </div>
+            <div id="emotionSpectrumBars" class="emotion-spectrum-container"></div>
+          </div>
+
+          <!-- Turning Points & Records List -->
+          <div class="insight-card">
+            <div class="card-header">
+              <h3 class="card-title">Hall of Fame Highlights</h3>
+              <span class="card-subtitle">Pivotal student breakthroughs</span>
+            </div>
+            <div id="turningPointsList" class="turning-points-container"></div>
+          </div>
+        </div>
+
+        <!-- Personal Student Narrative Reflection Banner -->
+        <div class="reflection-quote-card">
+          <div class="reflection-icon">🎓</div>
+          <div class="reflection-content">
+            <h4 class="reflection-title" id="reflectionHeadline">Your Academic Momentum Blueprint</h4>
+            <p class="reflection-body" id="reflectionText">Loading your personal study pattern...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 11: Settings & Data Management -->
+      <section id="view-settings" class="view-section">
+        <div class="settings-header-panel">
+          <h2 class="section-heading">Student Settings & Local Storage</h2>
+          <p class="section-subheading">Customize your experience and manage your secure local browser data.</p>
+        </div>
+
+        <div class="settings-grid">
+          <div class="settings-card">
+            <h3 class="card-title">Student Profile</h3>
+            <div class="form-group">
+              <label for="settingUserName" class="form-label">Your Name</label>
+              <input type="text" id="settingUserName" class="form-input" placeholder="e.g. Chirag">
+            </div>
+            <div class="form-group">
+              <label for="settingLifeTagline" class="form-label">Student Motivational Motto</label>
+              <input type="text" id="settingLifeTagline" class="form-input" placeholder="e.g. Master your studies, protect your health, shatter records.">
+            </div>
+            <div class="form-group">
+              <label for="settingTargetGpa" class="form-label">Target GPA / Percentage</label>
+              <input type="text" id="settingTargetGpa" class="form-input" placeholder="e.g. 3.90 GPA or 95%">
+            </div>
+            <button id="saveProfileSettingsBtn" class="btn btn-primary btn-sm">Save Profile</button>
+          </div>
+
+          <div class="settings-card">
+            <h3 class="card-title">Appearance & Motion</h3>
+            <div class="form-group">
+              <label for="settingThemeSelect" class="form-label">Color Theme</label>
+              <select id="settingThemeSelect" class="form-select">
+                <option value="dark">Cosmic Charcoal (Dark Mode)</option>
+                <option value="navy">Midnight Campus Navy</option>
+                <option value="emerald">Emerald Growth Dark</option>
+                <option value="light">Crisp Clean Daylight Mode</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="settingLineStyle" class="form-label">Map Path Style</label>
+              <select id="settingLineStyle" class="form-select">
+                <option value="curved">Curved Organic Bezier (Recommended)</option>
+                <option value="straight">Geometric Neon Vectors</option>
+              </select>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="settingReducedMotion">
+              <label for="settingReducedMotion">Reduce interface animations</label>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3 class="card-title">Export & Backup</h3>
+            <p class="settings-desc">Download a complete JSON copy of all study sessions, milestones, personal records, and wellness logs.</p>
+            <div class="settings-action-row">
+              <button id="exportJsonBtn" class="btn btn-outline">Export Data as JSON</button>
+              <button id="exportPrintSummaryBtn" class="btn btn-secondary">Printable Student Portfolio</button>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3 class="card-title">Import & Reset</h3>
+            <p class="settings-desc">Restore from a JSON backup or reset to the rich sample student records dataset.</p>
+            <div class="settings-action-row">
+              <label class="btn btn-outline file-input-label">
+                <span>Import JSON Backup</span>
+                <input type="file" id="importJsonFileInput" accept=".json" class="sr-only">
+              </label>
+              <button id="resetSampleDataBtn" class="btn btn-outline">Reset Sample Data</button>
+            </div>
+          </div>
+
+          <div class="settings-card danger-card">
+            <h3 class="card-title text-danger">Privacy & Storage</h3>
+            <p class="settings-desc">
+              All your study records, grades, and health data are stored exclusively in your browser's <code>LocalStorage</code> on this device.
+            </p>
+            <div class="storage-usage-bar-wrap">
+              <div class="storage-usage-labels">
+                <span>LocalStorage Used</span>
+                <span id="storageUsageText">0 KB / 5 MB</span>
+              </div>
+              <div class="storage-progress-track">
+                <div id="storageProgressBar" class="storage-progress-fill"></div>
+              </div>
+            </div>
+            <button id="clearAllDataBtn" class="btn btn-danger btn-sm">Erase All Local Data</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Slide-in Memory / Milestone Details Side Drawer -->
+    <aside id="memoryDetailsDrawer" class="details-drawer" aria-hidden="true">
+      <div class="drawer-header">
+        <div class="drawer-header-meta">
+          <span id="drawerCategoryBadge" class="category-badge">Domain</span>
+          <span id="drawerImportanceStars" class="importance-stars">★★★★★</span>
+        </div>
+        <button id="closeDrawerBtn" class="icon-btn" aria-label="Close details panel">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="drawer-content">
+        <div id="drawerImageContainer" class="drawer-image-wrapper hidden">
+          <img id="drawerImage" src="" alt="Milestone visual proof">
+        </div>
+
+        <h2 id="drawerTitle" class="drawer-title">Milestone Title</h2>
+        <div class="drawer-date-row">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span id="drawerDate">Date</span>
+          <span class="drawer-divider">&bull;</span>
+          <span id="drawerEmotionBadge" class="emotion-badge">Mindset</span>
+        </div>
+
+        <div class="drawer-section">
+          <h4 class="drawer-subhead">The Breakthrough & Context</h4>
+          <p id="drawerDescription" class="drawer-body-text">Description goes here.</p>
+        </div>
+
+        <div id="drawerLessonContainer" class="drawer-section lesson-callout">
+          <div class="callout-icon">💡</div>
+          <div>
+            <h4 class="drawer-subhead">Key Study Habit / Life Lesson</h4>
+            <p id="drawerLesson" class="drawer-lesson-text">Lesson goes here.</p>
+          </div>
+        </div>
+
+        <div id="drawerTagsContainer" class="drawer-section">
+          <h4 class="drawer-subhead">Tags</h4>
+          <div id="drawerTagsList" class="tags-container"></div>
+        </div>
+
+        <div class="drawer-section">
+          <h4 class="drawer-subhead">
+            <span>Connected Moments</span>
+            <span id="drawerConnectionCount" class="badge-count">0</span>
+          </h4>
+          <div id="drawerConnectionsList" class="connected-memories-list"></div>
+        </div>
+      </div>
+
+      <div class="drawer-footer">
+        <button id="drawerCenterMapBtn" class="btn btn-outline btn-sm">Focus on Map</button>
+        <div class="drawer-action-group">
+          <button id="drawerEditBtn" class="btn btn-secondary btn-sm">Edit</button>
+          <button id="drawerDeleteBtn" class="btn btn-danger-outline btn-sm">Delete</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MODAL 1: Add/Edit Milestone Modal -->
+    <div id="memoryModal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-labelledby="modalMemoryTitle">
+      <div class="modal-card modal-lg">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <h3 id="modalMemoryTitle" class="modal-title">Record Student Milestone / Breakthrough</h3>
+            <p class="modal-subtitle">Pin an exam triumph, record set, or study habit breakthrough on your constellation.</p>
+          </div>
+          <button id="closeMemoryModalBtn" class="icon-btn" aria-label="Close modal">&times;</button>
+        </div>
+
+        <form id="memoryForm" class="modal-body form-grid" novalidate>
+          <input type="hidden" id="formMemoryId">
+
+          <div class="form-group col-8">
+            <label for="formTitle" class="form-label required">Milestone / Record Title</label>
+            <input type="text" id="formTitle" class="form-input" placeholder="e.g. Scored 98% in Algorithms Midterm" required>
+            <span class="form-error" id="formTitleError"></span>
+          </div>
+
+          <div class="form-group col-4">
+            <label for="formDate" class="form-label required">Date of Achievement</label>
+            <input type="date" id="formDate" class="form-input" required>
+            <span class="form-error" id="formDateError"></span>
+          </div>
+
+          <div class="form-group col-6">
+            <label for="formCategory" class="form-label required">Student Domain</label>
+            <select id="formCategory" class="form-select" required>
+              <option value="academics">Academics & Exams</option>
+              <option value="records">Personal Records & High Scores</option>
+              <option value="wellness">Health & Wellness Breakthrough</option>
+              <option value="skills">Skills, Hackathons & Projects</option>
+              <option value="lessons">Study Habit & Life Lesson</option>
+              <option value="career">Career, Internships & Resume</option>
+              <option value="friendships">Study Groups & Mentorship</option>
+              <option value="goals">Future Dreams & Ambitions</option>
+              <option value="turning_points">Landmark Turning Point</option>
+            </select>
+          </div>
+
+          <div class="form-group col-6">
+            <label for="formEmotion" class="form-label">Dominant Mindset</label>
+            <select id="formEmotion" class="form-select">
+              <option value="Joy & Triumph">✨ Joy & Triumph</option>
+              <option value="Unshakable Focus">🎯 Unshakable Focus</option>
+              <option value="Resilience & Grit">🔥 Resilience & Grit</option>
+              <option value="Pride & Mastery">🏆 Pride & Mastery</option>
+              <option value="Calm & Peace">🌿 Calm & Peace</option>
+              <option value="Curiosity & Wonder">🌌 Curiosity & Wonder</option>
+            </select>
+          </div>
+
+          <div class="form-group col-6">
+            <label class="form-label">Significance / Impact Level</label>
+            <div class="star-rating-picker" id="starRatingPicker">
+              <button type="button" class="star-btn active" data-rating="1">★</button>
+              <button type="button" class="star-btn active" data-rating="2">★</button>
+              <button type="button" class="star-btn active" data-rating="3">★</button>
+              <button type="button" class="star-btn" data-rating="4">★</button>
+              <button type="button" class="star-btn" data-rating="5">★</button>
+              <span class="rating-label" id="starRatingLabel">Significant (3/5)</span>
+            </div>
+            <input type="hidden" id="formImportance" value="3">
+          </div>
+
+          <div class="form-group col-6">
+            <label for="formEra" class="form-label">Academic Phase</label>
+            <select id="formEra" class="form-select">
+              <option value="early">Foundations & High School</option>
+              <option value="academic">University & College</option>
+              <option value="career">Internships & Research</option>
+              <option value="future">Post-Grad Horizon</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12">
+            <label for="formDescription" class="form-label required">The Story & How You Did It</label>
+            <textarea id="formDescription" class="form-textarea" rows="3" placeholder="What preparation or discipline led to this? How did it feel?" required></textarea>
+            <span class="form-error" id="formDescriptionError"></span>
+          </div>
+
+          <div class="form-group col-12">
+            <label for="formLesson" class="form-label">Key Study Habit / Life Lesson Harvested</label>
+            <input type="text" id="formLesson" class="form-input" placeholder="e.g. Solving 5 past exam questions daily beats cramming the night before.">
+          </div>
+
+          <div class="form-group col-12">
+            <label for="formTags" class="form-label">Tags (separated by commas)</label>
+            <input type="text" id="formTags" class="form-input" placeholder="e.g. exam, calculus, gpa, morning-routine">
+          </div>
+
+          <div class="form-group col-12">
+            <label class="form-label">Connect to Related Milestones (Curved Path)</label>
+            <div id="formConnectionsPicker" class="connections-picker-box"></div>
+          </div>
+
+          <div class="form-group col-12">
+            <label class="form-label">Optional Photo Proof / Certificate Attachment</label>
+            <div class="image-upload-wrapper">
+              <input type="file" id="formImageInput" accept="image/*" class="sr-only">
+              <label for="formImageInput" class="upload-dropzone">
+                <span>Select image preview (Certificate, exam mark sheet, project photo)</span>
+              </label>
+              <div id="formImagePreviewBox" class="image-preview-container hidden">
+                <img id="formImagePreview" src="" alt="Selected image">
+                <button type="button" id="removeImageBtn" class="remove-img-btn">&times;</button>
+              </div>
+            </div>
+            <input type="hidden" id="formImageBase64">
+          </div>
+
+          <div class="modal-footer col-12">
+            <button type="button" id="cancelMemoryModalBtn" class="btn btn-outline">Cancel</button>
+            <button type="submit" id="saveMemoryBtn" class="btn btn-primary">Save & Map Milestone</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL 2: Add/Edit Course Modal -->
+    <div id="courseModal" class="modal-backdrop" aria-hidden="true" role="dialog">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <h3 id="modalCourseTitle" class="modal-title">Add Course / Subject</h3>
+            <p class="modal-subtitle">Track academic metrics, target grades, and deadlines.</p>
+          </div>
+          <button id="closeCourseModalBtn" class="icon-btn">&times;</button>
+        </div>
+        <form id="courseForm" class="modal-body form-grid">
+          <input type="hidden" id="formCourseId">
+          <div class="form-group col-12">
+            <label for="formCourseName" class="form-label required">Course / Subject Name</label>
+            <input type="text" id="formCourseName" class="form-input" placeholder="e.g. Distributed Systems & Algorithms" required>
+          </div>
+          <div class="form-group col-6">
+            <label for="formCourseCode" class="form-label">Course Code</label>
+            <input type="text" id="formCourseCode" class="form-input" placeholder="e.g. CS-301">
+          </div>
+          <div class="form-group col-6">
+            <label for="formCourseCredits" class="form-label">Credits</label>
+            <input type="number" id="formCourseCredits" class="form-input" value="4" min="1" max="10">
+          </div>
+          <div class="form-group col-6">
+            <label for="formCourseTargetGrade" class="form-label">Target Grade</label>
+            <input type="text" id="formCourseTargetGrade" class="form-input" placeholder="e.g. A+ or 95%">
+          </div>
+          <div class="form-group col-6">
+            <label for="formCourseCurrentScore" class="form-label">Current Estimated Score (%)</label>
+            <input type="number" id="formCourseCurrentScore" class="form-input" value="88" min="0" max="100">
+          </div>
+          <div class="form-group col-12">
+            <label for="formCourseNextExam" class="form-label">Next Major Exam / Project Deadline</label>
+            <input type="date" id="formCourseNextExam" class="form-input">
+          </div>
+          <div class="modal-footer col-12">
+            <button type="button" id="cancelCourseModalBtn" class="btn btn-outline">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Course</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL 3: Add/Edit Personal Record Modal -->
+    <div id="recordModal" class="modal-backdrop" aria-hidden="true" role="dialog">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <h3 id="modalRecordTitle" class="modal-title">Log a Personal Record / Best Benchmark</h3>
+            <p class="modal-subtitle">Honor your all-time high score or personal best achievement.</p>
+          </div>
+          <button id="closeRecordModalBtn" class="icon-btn">&times;</button>
+        </div>
+        <form id="recordForm" class="modal-body form-grid">
+          <input type="hidden" id="formRecordId">
+          <div class="form-group col-12">
+            <label for="formRecordTitle" class="form-label required">Record Title</label>
+            <input type="text" id="formRecordTitle" class="form-input" placeholder="e.g. Highest Exam Score: 99/100 in Calculus" required>
+          </div>
+          <div class="form-group col-6">
+            <label for="formRecordDomain" class="form-label required">Domain</label>
+            <select id="formRecordDomain" class="form-select">
+              <option value="Academic">📚 Academic & Grades</option>
+              <option value="Tech & Coding">💻 Tech & Hackathons</option>
+              <option value="Fitness & Health">🏃 Fitness & Health</option>
+              <option value="Habits & Reading">📖 Habits & Streaks</option>
+            </select>
+          </div>
+          <div class="form-group col-6">
+            <label for="formRecordValue" class="form-label required">Record Metric / Value</label>
+            <input type="text" id="formRecordValue" class="form-input" placeholder="e.g. 99%, 150 Problems, 10km in 48m" required>
+          </div>
+          <div class="form-group col-12">
+            <label for="formRecordDesc" class="form-label">How did you achieve this record?</label>
+            <textarea id="formRecordDesc" class="form-textarea" rows="2" placeholder="Describe the discipline or strategy that unlocked this personal best..."></textarea>
+          </div>
+          <div class="modal-footer col-12">
+            <button type="button" id="cancelRecordModalBtn" class="btn btn-outline">Cancel</button>
+            <button type="submit" class="btn btn-primary">Enshrine Record</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL 4: Add/Edit Goal Modal -->
+    <div id="goalModal" class="modal-backdrop" aria-hidden="true" role="dialog">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <h3 id="modalGoalTitle" class="modal-title">Define an Academic Ambition</h3>
+            <p class="modal-subtitle">Project your goals forward on your constellation map.</p>
+          </div>
+          <button id="closeGoalModalBtn" class="icon-btn">&times;</button>
+        </div>
+        <form id="goalForm" class="modal-body form-grid">
+          <input type="hidden" id="formGoalId">
+          <div class="form-group col-12">
+            <label for="formGoalTitle" class="form-label required">Goal Title</label>
+            <input type="text" id="formGoalTitle" class="form-input" placeholder="e.g. Graduate with First-Class Honors (GPA > 3.8)" required>
+          </div>
+          <div class="form-group col-6">
+            <label for="formGoalDate" class="form-label required">Target Date</label>
+            <input type="date" id="formGoalDate" class="form-input" required>
+          </div>
+          <div class="form-group col-6">
+            <label for="formGoalCategory" class="form-label required">Category</label>
+            <select id="formGoalCategory" class="form-select">
+              <option value="academics">Academics & Exams</option>
+              <option value="skills">Skills & Projects</option>
+              <option value="wellness">Health & Fitness</option>
+              <option value="career">Internships & Career</option>
+            </select>
+          </div>
+          <div class="form-group col-12">
+            <label for="formGoalDesc" class="form-label required">Why is this goal meaningful?</label>
+            <textarea id="formGoalDesc" class="form-textarea" rows="2" required></textarea>
+          </div>
+          <div class="form-group col-6">
+            <label for="formGoalProgress" class="form-label">Progress: <span id="goalProgressValueLabel">0%</span></label>
+            <input type="range" id="formGoalProgress" class="form-range" min="0" max="100" value="0">
+          </div>
+          <div class="form-group col-6">
+            <label for="formGoalStatus" class="form-label">Status</label>
+            <select id="formGoalStatus" class="form-select">
+              <option value="not_started">Not Started</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed (Becomes Achievement!)</option>
+            </select>
+          </div>
+          <div class="form-group col-12">
+            <label class="form-label">Milestones</label>
+            <div id="goalMilestonesList" class="goal-milestones-input-list"></div>
+            <div class="add-milestone-row">
+              <input type="text" id="newMilestoneInput" class="form-input input-sm" placeholder="Add milestone step...">
+              <button type="button" id="addMilestoneBtn" class="btn btn-outline btn-sm">Add Step</button>
+            </div>
+          </div>
+          <div class="modal-footer col-12">
+            <button type="button" id="cancelGoalModalBtn" class="btn btn-outline">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Ambition</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL 5: 2-Minute Guided Breathing Exercise Modal -->
+    <div id="breathingModal" class="modal-backdrop" aria-hidden="true" role="dialog">
+      <div class="modal-card modal-sm breathing-card">
+        <button id="closeBreathingModalBtn" class="breathing-close-btn">&times;</button>
+        <h3 class="breathing-title">2-Minute Exam De-Stress</h3>
+        <p class="breathing-sub">Box Breathing: Inhale &bull; Hold &bull; Exhale &bull; Hold</p>
+        <div class="breathing-visual-container">
+          <div class="breathing-circle" id="breathingCircle">
+            <span id="breathingActionText">Inhale</span>
+          </div>
+        </div>
+        <div class="breathing-timer-count" id="breathingTimerCount">02:00</div>
+        <button id="startBreathingSessionBtn" class="btn btn-primary btn-block">Begin Guided Breath</button>
+      </div>
+    </div>
+
+    <!-- MODAL 6: Confirmation Dialog -->
+    <div id="confirmModal" class="modal-backdrop" aria-hidden="true" role="dialog">
+      <div class="modal-card modal-sm confirm-card">
+        <div class="confirm-icon-wrap" id="confirmIcon">⚠️</div>
+        <h3 id="confirmTitle" class="confirm-title">Are you sure?</h3>
+        <p id="confirmMessage" class="confirm-message">This action cannot be undone.</p>
+        <div class="confirm-actions">
+          <button id="confirmCancelBtn" class="btn btn-outline">Cancel</button>
+          <button id="confirmProceedBtn" class="btn btn-danger">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Search Command Palette (Ctrl+K) -->
+    <div id="quickSearchPalette" class="palette-backdrop hidden" aria-hidden="true">
+      <div class="palette-card">
+        <div class="palette-search-box">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="paletteInput" placeholder="Quick find courses, records, milestones, lessons..." autofocus>
+          <kbd class="palette-esc">Esc</kbd>
+        </div>
+        <div id="paletteResults" class="palette-results"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
