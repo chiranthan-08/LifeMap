@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <title>LifeMap Student — Ultimate Student Motivational & Living Journey Portal</title>
   <meta name="description" content="LifeMap Student is an interactive motivational portal for students to master academics, maintain physical and mental health, set personal records, and map their educational journey.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,6 +33,12 @@
         <button id="sidebarToggleBtn" class="icon-btn sidebar-toggle" title="Collapse sidebar" aria-label="Toggle Sidebar">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button id="sidebarCloseBtn" class="icon-btn sidebar-close-btn" title="Close sidebar" aria-label="Close Sidebar">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
       </div>
@@ -181,6 +187,9 @@
         </div>
       </div>
     </aside>
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebarBackdrop" class="sidebar-backdrop" aria-hidden="true"></div>
 
     <!-- Main Content Area -->
     <main class="main-content">
@@ -1190,6 +1199,9 @@
       </div>
     </aside>
 
+    <!-- Mobile Drawer Backdrop Overlay -->
+    <div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
+
     <!-- MODAL 1: Add/Edit Milestone Modal -->
     <div id="memoryModal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-labelledby="modalMemoryTitle">
       <div class="modal-card modal-lg">
@@ -1499,6 +1511,53 @@
         <div id="paletteResults" class="palette-results"></div>
       </div>
     </div>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav id="mobileBottomNav" class="mobile-bottom-nav" aria-label="Mobile Bottom Navigation">
+      <button class="mobile-bottom-item active" data-view="dashboard" id="mobile-nav-dashboard" aria-label="Dashboard Overview">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="9" rx="1"/>
+          <rect x="14" y="3" width="7" height="5" rx="1"/>
+          <rect x="14" y="12" width="7" height="9" rx="1"/>
+          <rect x="3" y="16" width="7" height="5" rx="1"/>
+        </svg>
+        <span>Overview</span>
+      </button>
+
+      <button class="mobile-bottom-item" data-view="map" id="mobile-nav-map" aria-label="Student Journey Map">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+          <line x1="8" y1="2" x2="8" y2="18"/>
+          <line x1="16" y1="6" x2="16" y2="22"/>
+        </svg>
+        <span>Map</span>
+      </button>
+
+      <button class="mobile-bottom-item" data-view="focus" id="mobile-nav-focus" aria-label="Study & Focus Pomodoro Zone">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span>Focus</span>
+      </button>
+
+      <button class="mobile-bottom-item" data-view="academics" id="mobile-nav-academics" aria-label="Courses & Academic Grades">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+        <span>Courses</span>
+      </button>
+
+      <button class="mobile-bottom-item" id="mobileBottomMenuBtn" aria-label="Open Full Portal Menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <span>Menu</span>
+      </button>
+    </nav>
 
   </div>
 

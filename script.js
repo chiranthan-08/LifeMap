@@ -542,6 +542,10 @@
       btn.classList.toggle('active', btn.dataset.view === viewName);
     });
 
+    document.querySelectorAll('.mobile-bottom-item').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === viewName);
+    });
+
     document.querySelectorAll('.view-section').forEach(sec => {
       sec.classList.remove('active');
     });
@@ -616,6 +620,7 @@
     }
 
     document.getElementById('sidebar')?.classList.remove('mobile-open');
+    document.getElementById('sidebarBackdrop')?.classList.remove('active');
   }
 
   function applySettings() {
@@ -1665,12 +1670,29 @@
   }
 
   let initialTouchDist = null;
+  let mapTouchStartX = 0;
+  let mapTouchStartY = 0;
+  let mapTouchStartTime = 0;
+  let mapTouchMoved = false;
+  let mapTouchTargetNode = null;
+
   function onMapTouchStart(e) {
     if (e.touches.length === 1) {
+      const touch = e.touches[0];
+      mapTouchStartX = touch.clientX;
+      mapTouchStartY = touch.clientY;
+      mapTouchStartTime = Date.now();
+      mapTouchMoved = false;
+
+      const nodeEl = touch.target ? touch.target.closest('.map-node-group') : null;
+      mapTouchTargetNode = nodeEl ? nodeEl.getAttribute('data-id') : null;
+
       State.map.isPanning = true;
-      State.map.startX = e.touches[0].clientX - State.map.panX;
-      State.map.startY = e.touches[0].clientY - State.map.panY;
+      State.map.startX = touch.clientX - State.map.panX;
+      State.map.startY = touch.clientY - State.map.panY;
     } else if (e.touches.length === 2) {
+      mapTouchTargetNode = null;
+      mapTouchMoved = true;
       initialTouchDist = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
         e.touches[0].clientY - e.touches[1].clientY
@@ -1679,12 +1701,18 @@
   }
 
   function onMapTouchMove(e) {
-    e.preventDefault();
     if (e.touches.length === 1 && State.map.isPanning) {
-      State.map.panX = e.touches[0].clientX - State.map.startX;
-      State.map.panY = e.touches[0].clientY - State.map.startY;
+      const touch = e.touches[0];
+      const dist = Math.hypot(touch.clientX - mapTouchStartX, touch.clientY - mapTouchStartY);
+      if (dist > 8) {
+        mapTouchMoved = true;
+      }
+      e.preventDefault();
+      State.map.panX = touch.clientX - State.map.startX;
+      State.map.panY = touch.clientY - State.map.startY;
       applyMapTransform();
     } else if (e.touches.length === 2 && initialTouchDist) {
+      e.preventDefault();
       const currentDist = Math.hypot(
         e.touches[0].clientX - e.touches[1].clientX,
         e.touches[0].clientY - e.touches[1].clientY
@@ -1695,9 +1723,15 @@
     }
   }
 
-  function onMapTouchEnd() {
+  function onMapTouchEnd(e) {
     State.map.isPanning = false;
     initialTouchDist = null;
+
+    if (!mapTouchMoved && mapTouchTargetNode && (Date.now() - mapTouchStartTime < 500)) {
+      selectNode(mapTouchTargetNode);
+      mapTouchTargetNode = null;
+      if (e.cancelable) e.preventDefault();
+    }
   }
 
   function toggleMapLabels() {
@@ -1874,6 +1908,32 @@
         e.stopPropagation();
         State.map.draggedNode = mem.id;
         State.map.hasDraggedNode = false;
+      });
+
+      let nodeTouchMoved = false;
+      let nodeTouchStartPos = { x: 0, y: 0 };
+      group.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          nodeTouchMoved = false;
+          nodeTouchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+      }, { passive: true });
+
+      group.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 1) {
+          const dx = e.touches[0].clientX - nodeTouchStartPos.x;
+          const dy = e.touches[0].clientY - nodeTouchStartPos.y;
+          if (Math.hypot(dx, dy) > 8) {
+            nodeTouchMoved = true;
+          }
+        }
+      }, { passive: true });
+
+      group.addEventListener('touchend', (e) => {
+        if (!nodeTouchMoved) {
+          e.stopPropagation();
+          selectNode(mem.id);
+        }
       });
 
       group.addEventListener('click', (e) => {
@@ -2163,6 +2223,7 @@
 
     drawer.classList.add('open');
     drawer.setAttribute('aria-hidden', 'false');
+    document.getElementById('drawerBackdrop')?.classList.add('active');
   }
 
   function closeMemoryDetails() {
@@ -2171,6 +2232,7 @@
       drawer.classList.remove('open');
       drawer.setAttribute('aria-hidden', 'true');
     }
+    document.getElementById('drawerBackdrop')?.classList.remove('active');
     State.selectedMemoryId = null;
     clearNodeHighlights();
   }
@@ -3361,13 +3423,40 @@
       btn.addEventListener('click', (e) => switchView(e.currentTarget.dataset.view));
     });
 
+    // Mobile Bottom Navigation
+    document.querySelectorAll('.mobile-bottom-item[data-view]').forEach(btn => {
+      btn.addEventListener('click', (e) => switchView(e.currentTarget.dataset.view));
+    });
+
+    document.getElementById('mobileBottomMenuBtn')?.addEventListener('click', () => {
+      document.getElementById('sidebar')?.classList.add('mobile-open');
+      document.getElementById('sidebarBackdrop')?.classList.add('active');
+    });
+
     document.getElementById('quickAddMemoryBtn')?.addEventListener('click', openAddMemoryModal);
     document.getElementById('sidebarToggleBtn')?.addEventListener('click', () => {
       document.getElementById('sidebar')?.classList.toggle('collapsed');
     });
+    
     document.getElementById('mobileMenuBtn')?.addEventListener('click', () => {
-      document.getElementById('sidebar')?.classList.toggle('mobile-open');
+      const sb = document.getElementById('sidebar');
+      const bd = document.getElementById('sidebarBackdrop');
+      const isOpen = sb?.classList.toggle('mobile-open');
+      bd?.classList.toggle('active', !!isOpen);
     });
+
+    document.getElementById('sidebarCloseBtn')?.addEventListener('click', () => {
+      document.getElementById('sidebar')?.classList.remove('mobile-open');
+      document.getElementById('sidebarBackdrop')?.classList.remove('active');
+    });
+
+    document.getElementById('sidebarBackdrop')?.addEventListener('click', () => {
+      document.getElementById('sidebar')?.classList.remove('mobile-open');
+      document.getElementById('sidebarBackdrop')?.classList.remove('active');
+    });
+
+    document.getElementById('drawerBackdrop')?.addEventListener('click', closeMemoryDetails);
+
     document.getElementById('globalSearchInput')?.addEventListener('click', openQuickSearchPalette);
     document.getElementById('closeDrawerBtn')?.addEventListener('click', closeMemoryDetails);
     document.getElementById('addDailyMissionBtn')?.addEventListener('click', addDailyMissionPrompt);
