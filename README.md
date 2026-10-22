@@ -1,3 +1,5 @@
+My 1st startup project
+
 # LifeMap Student — Your Life as a Living Map 🎓✨
 
 > **Tagline:** *"Master your studies, protect your health, and shatter your personal records."*  
