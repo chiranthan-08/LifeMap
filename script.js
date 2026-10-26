@@ -8,7 +8,7 @@
   'use strict';
 
   // ==========================================
-  // 1. STORAGE KEYS & CONSTANTS
+  // 1. STORAGE KEYS CONSTANTS
   // ==========================================
 
   const STORAGE_KEYS = {
